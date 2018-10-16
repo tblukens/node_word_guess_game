@@ -2,60 +2,112 @@ var inquirer = require("inquirer");
 
 var Word = require("./Word");
 
-var listOfWords = [
-    "WORD",
-    "Another",
-    "Thenanother",
-    "Superwordontop"
+const listOfWords = [
+    "word",
+    "quote",
+    "test",
+    "rest",
+    "ash",
+    "bed",
+    "rock",
+    "wreck"
 ];
 
-var newGame = true;
+let newGame = true;
 
-var maxGuesses = 10;
+let wordGuessed = false;
 
-var numberOfLtrsRemaining = 0;
+let maxGuesses;
 
-var randomWord = listOfWords[Math.floor(listOfWords.length * Math.random())];
+let numberOfLtrsRemaining;
 
-var wordToGuess = new Word(randomWord.toUpperCase())
+let randomWord;
 
-console.log(randomWord);
+let wordToGuess;
 
-var startGame = function () {
-    if (newGame === true) {
-        newGame = false;
-        displayWord();
-    }
-    inquirer.prompt([
-        {
-            name: "letterGuess",
-            message: "Guess a letter...",
+let startGame = function () {
+    lettersRemaining();
+    console.log(maxGuesses + " max guesses.")
+    if (maxGuesses > 0 && wordGuessed === false) {
+        if (newGame === true) {
+            newGame = false;
+            displayWord();
         }
-    ]).then(function (guess) {
-        wordToGuess.checkGuessedLetter(guess.letterGuess.toUpperCase());
-        console.log(guess.letterGuess.toUpperCase())
-        displayWord();
-        maxGuesses--;
-        console.log("Number of guesses remaining: "+maxGuesses)
-        startGame();
-    })
-}
-
-var lettersRemaining = function() {
-    var remaining = 0;
-    for (let i = 0; i < wordToGuess; i++) {
-        const element = wordToGuess[i];
-        console.log(element)
-        // if(element === "_") {
-        //     remaining++;
-        // }
+        inquirer.prompt([
+            {
+                name: "letterGuess",
+                message: "Guess a letter...",
+            }
+        ]).then(function (guess) {
+            wordToGuess.checkGuessedLetter(guess.letterGuess.toUpperCase());
+            // console.log(guess.letterGuess.toUpperCase())
+            displayWord();
+            maxGuesses--;
+            // console.log("Number of guesses remaining: " + maxGuesses)
+            startGame();
+        })
+    } else if (maxGuesses <= 0) {
+        console.log("GAME OVER")
+        endGame();
     }
-    console.log(remaining)
 }
 
-var displayWord = function () {
+let lettersRemaining = function () {
+    let remaining = wordToGuess.wholeWord.length;
+    for (let i = 0; i < wordToGuess.wholeWord.length; i++) {
+        const element = wordToGuess.wholeWord[i].guessed;
+        if (element === true) {
+            remaining--;
+        } else {
+
+        }
+    }
+    console.log("remaining: " + remaining)
+    if (remaining === 0) {
+        wordGuessed = true;
+        console.log("You win!")
+        endGame();
+        return false;
+    }
+    numberOfLtrsRemaining = remaining;
+    // console.log(remaining)
+    console.log("Number of letters remaining: " + numberOfLtrsRemaining)
+}
+
+let displayWord = function () {
     wordToGuess.theString();
 }
 
-lettersRemaining();
-// startGame();
+let endGame = function () {
+    // console.log("Would you like to play again?")
+    inquirer.prompt([{
+        name: "newgame",
+        type: "confirm",
+        message: "Would you like to play again?"
+    }]).then(function (answer) {
+        if (answer.newgame === true) {
+            resetGame();
+        } else {
+            return false;
+        }
+    })
+
+
+}
+
+let resetGame = function () {
+    wordGuessed = false;
+    newGame = true;
+    randomWord = listOfWords[Math.floor(listOfWords.length * Math.random())].toUpperCase();
+    if (randomWord = wordToGuess.word) {
+        resetGame();
+    } else {
+        wordToGuess = new Word(randomWord);
+        console.log(wordToGuess + "\n" + randomWord)
+        lettersRemaining();
+        maxGuesses = numberOfLtrsRemaining + 5;
+        startGame();
+    }
+}
+
+resetGame();
