@@ -1,10 +1,11 @@
-var inquirer = require("inquirer");
+const inquirer = require("inquirer");
 
-var Word = require("./Word");
+const Word = require("./Word");
 
-var isLetter = require("is-letter");
+const isLetter = require("is-letter");
 
-var chalk = require("chalk");
+const chalk = require('chalk');
+const log = console.log;
 
 const listOfWords = [
     "word",
@@ -37,7 +38,7 @@ let startGame = function () {
     lettersRemaining();
     if (maxGuesses > 0 && wordGuessed === false) {
         if (guessedLetters.length > 0) {
-            console.log("Guessed Letters: " + guessedLetters.join(","))
+            console.log("\nGuessed Letters: " + chalk.green.inverse(" " + guessedLetters.join(",")+" \n"))
         }
         if (newGame === true) {
             newGame = false;
@@ -46,18 +47,18 @@ let startGame = function () {
         inquirer.prompt([
             {
                 name: "letterGuess",
-                message: "Guess a letter...",
+                message: chalk.blue.inverse("Guess a letter: "),
             }
         ]).then(function (guess) {
             if (!isLetter(guess.letterGuess)) {
-                console.log("Please enter a single letter...");
+                log(chalk.red("\nPlease enter a single letter...\n"));
                 startGame();
             } else {
 
                 if (guessedLetters.indexOf(guess.letterGuess.toUpperCase()) === -1) {
                     noDuplicate(guess.letterGuess.toUpperCase());
                 } else {
-                    console.log("Letter has been guessed already. Please give a different letter.");
+                    console.log(chalk.red("\nLetter has been guessed already. Please give a different letter.\n"));
                     startGame();
                 }
             }
@@ -65,7 +66,7 @@ let startGame = function () {
             // } PART OF FIX *** ***
         })
     } else if (maxGuesses <= 0) {
-        console.log("Sorry, you ran out of guess attempts. :(")
+        console.log(chalk.red.inverse("\n Sorry, you ran out of guess attempts. :( \n "))
         endGame();
     }
 }
@@ -77,11 +78,12 @@ let noDuplicate = function (guess) {
     guessedLetters.push(guess)
     wordToGuess.checkGuessedLetter(guess);
     displayWord();
-    console.log("Number of guesses remaining: " + maxGuesses)
+    console.log(chalk.yellow.inverse("\nNumber of guesses remaining: " + maxGuesses + " "))
     startGame();
 }
 
 let subtractGuessTotal = function () {
+    log(chalk.red.inverse("\n¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\nSorry, that was not one of the letters...\n_________________________________________\n"))
     maxGuesses--;
 }
 
@@ -97,7 +99,7 @@ let lettersRemaining = function () {
     }
     if (remaining === 0) {
         wordGuessed = true;
-        console.log("You win!")
+        console.log("\n¯¯¯¯¯¯¯¯¯¯¯¯\nYou win!\n____________\n")
         endGame();
         return false;
     }
@@ -112,7 +114,7 @@ let endGame = function () {
     inquirer.prompt([{
         name: "newgame",
         type: "confirm",
-        message: "Would you like to play again?"
+        message: chalk.cyan.inverse("Would you like to play again?")
     }]).then(function (answer) {
         if (answer.newgame === true) {
             resetGame();
@@ -150,7 +152,7 @@ let loadWordAndStart = function () {
     // ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
     lettersRemaining();
     maxGuesses = numberOfLtrsRemaining + 5;
-    console.log("Number of guesses: " + maxGuesses)
+    console.log(chalk.yellow.inverse("\n Number of guesses: " + maxGuesses+" \n"))
     startGame();
 }
 
