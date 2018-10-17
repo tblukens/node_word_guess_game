@@ -4,6 +4,8 @@ var Word = require("./Word");
 
 var isLetter = require("is-letter");
 
+var chalk = require("chalk");
+
 const listOfWords = [
     "word",
     "quote",
@@ -52,19 +54,12 @@ let startGame = function () {
                 startGame();
             } else {
 
-                // *** NEEDS FIX ***
-                // if (guessedLetters.length > 0) {
-                //     guessedLetters.forEach(element => {
-                //         if (guess.letterGuess === element) {
-                //             console.log("Letter has been guessed already. Please enter a different letter.")
-                //             startGame();
-                //         } else {
-                //             noDuplicate(guess.letterGuess);
-                //         }
-                //     });
-                // } else {
-                // *** NEEDS FIX ***
-                noDuplicate(guess.letterGuess);
+                if (guessedLetters.indexOf(guess.letterGuess.toUpperCase()) === -1) {
+                    noDuplicate(guess.letterGuess.toUpperCase());
+                } else {
+                    console.log("Letter has been guessed already. Please give a different letter.");
+                    startGame();
+                }
             }
 
             // } PART OF FIX *** ***
@@ -76,12 +71,18 @@ let startGame = function () {
 }
 
 let noDuplicate = function (guess) {
+    if (wordToGuess.word.indexOf(guess) === -1){
+        subtractGuessTotal();
+    }
     guessedLetters.push(guess)
-    wordToGuess.checkGuessedLetter(guess.toUpperCase());
+    wordToGuess.checkGuessedLetter(guess);
     displayWord();
-    maxGuesses--;
     console.log("Number of guesses remaining: " + maxGuesses)
     startGame();
+}
+
+let subtractGuessTotal = function () {
+    maxGuesses--;
 }
 
 let lettersRemaining = function () {
@@ -124,6 +125,7 @@ let endGame = function () {
 }
 
 let resetGame = function () {
+    guessedLetters = [];
     wordGuessed = false;
     newGame = true;
     randomWord = listOfWords[Math.floor(listOfWords.length * Math.random())].toUpperCase();

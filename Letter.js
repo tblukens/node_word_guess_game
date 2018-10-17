@@ -16,7 +16,7 @@ var Letter = function(letter, guessed){
         if (guess === this.letter) {
             this.guessed = true;
             console.log("Correct! The letter was: " + this.letter)
-        } // more functionality???
+        }
     }
 }
 
