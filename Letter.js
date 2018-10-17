@@ -5,8 +5,8 @@ var Letter = function(letter, guessed){
     this.guessed = guessed;
     this.displayed = function() {
         if (this.guessed === true) {
-            return this.letter;
             console.log(this.letter)
+            return this.letter;
         } else if (this.guessed === false) {
             //show underscore
             return "_";

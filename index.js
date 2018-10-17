@@ -27,9 +27,16 @@ let randomWord;
 
 let wordToGuess;
 
+let hasBeenGuessed = false;
+
+let guessedLetters = [];
+
 let startGame = function () {
     lettersRemaining();
     if (maxGuesses > 0 && wordGuessed === false) {
+        if (guessedLetters.length > 0) {
+            console.log("Guessed Letters: " + guessedLetters.join(","))
+        }
         if (newGame === true) {
             newGame = false;
             displayWord();
@@ -44,17 +51,37 @@ let startGame = function () {
                 console.log("Please enter a single letter...");
                 startGame();
             } else {
-                wordToGuess.checkGuessedLetter(guess.letterGuess.toUpperCase());
-                displayWord();
-                maxGuesses--;
-                console.log("Number of guesses remaining: "+maxGuesses)
-                startGame();
+
+                // *** NEEDS FIX ***
+                // if (guessedLetters.length > 0) {
+                //     guessedLetters.forEach(element => {
+                //         if (guess.letterGuess === element) {
+                //             console.log("Letter has been guessed already. Please enter a different letter.")
+                //             startGame();
+                //         } else {
+                //             noDuplicate(guess.letterGuess);
+                //         }
+                //     });
+                // } else {
+                // *** NEEDS FIX ***
+                noDuplicate(guess.letterGuess);
             }
+
+            // } PART OF FIX *** ***
         })
     } else if (maxGuesses <= 0) {
         console.log("Sorry, you ran out of guess attempts. :(")
         endGame();
     }
+}
+
+let noDuplicate = function (guess) {
+    guessedLetters.push(guess)
+    wordToGuess.checkGuessedLetter(guess.toUpperCase());
+    displayWord();
+    maxGuesses--;
+    console.log("Number of guesses remaining: " + maxGuesses)
+    startGame();
 }
 
 let lettersRemaining = function () {
@@ -117,11 +144,11 @@ let loadWordAndStart = function () {
     wordToGuess = new Word(randomWord);
     // logs word for testing ONLY
     //  _____________________________________________
-    console.log(wordToGuess + "\n" + randomWord)
+    // console.log(wordToGuess + "\n" + randomWord)
     // ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
     lettersRemaining();
     maxGuesses = numberOfLtrsRemaining + 5;
-    console.log("Number of guesses: "+maxGuesses)
+    console.log("Number of guesses: " + maxGuesses)
     startGame();
 }
 
