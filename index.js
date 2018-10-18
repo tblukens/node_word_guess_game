@@ -8,14 +8,17 @@ const chalk = require('chalk');
 const log = console.log;
 
 const listOfWords = [
-    "word",
-    "quote",
-    "test",
-    "rest",
-    "ash",
-    "bed",
-    "rock",
-    "wreck"
+    "Final Fantasy",
+    "Chrono Trigger",
+    "Legend of Zelda",
+    "Kingdom Hearts",
+    "World of Warcraft",
+    "Fallout",
+    "Metal Gear Solid",
+    "Elder Scrolls",
+    "Super Mario Bros",
+    "Grand Theft Auto",
+    
 ];
 
 let newGame = true;
@@ -30,15 +33,13 @@ let randomWord;
 
 let wordToGuess;
 
-let hasBeenGuessed = false;
-
 let guessedLetters = [];
 
 let startGame = function () {
     lettersRemaining();
     if (maxGuesses > 0 && wordGuessed === false) {
         if (guessedLetters.length > 0) {
-            console.log("\nGuessed Letters: " + chalk.green.inverse(" " + guessedLetters.join(",")+" \n"))
+            console.log("\nGuessed Letters: " + chalk.green(" " + guessedLetters.join(",")+" \n"))
         }
         if (newGame === true) {
             newGame = false;
@@ -66,7 +67,7 @@ let startGame = function () {
             // } PART OF FIX *** ***
         })
     } else if (maxGuesses <= 0) {
-        console.log(chalk.red.inverse("\n Sorry, you ran out of guess attempts. :( \n "))
+        console.log(chalk.red.inverse("\n Sorry, you ran out of guess attempts. :( \n"))
         endGame();
     }
 }
@@ -83,7 +84,8 @@ let noDuplicate = function (guess) {
 }
 
 let subtractGuessTotal = function () {
-    log(chalk.red.inverse("\n¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\nSorry, that was not one of the letters...\n_________________________________________\n"))
+    let repeater = 43;
+    log(chalk.red.inverse("\n"+"¯".repeat(repeater)+"\n Sorry, that was not one of the letters... \n"+"_".repeat(repeater)+"\n"))
     maxGuesses--;
 }
 
@@ -99,7 +101,7 @@ let lettersRemaining = function () {
     }
     if (remaining === 0) {
         wordGuessed = true;
-        console.log("\n¯¯¯¯¯¯¯¯¯¯¯¯\nYou win!\n____________\n")
+        console.log(chalk.cyan.inverse("\n"+"¯".repeat(10)+"\n You win! \n"+"_".repeat(10)+"\n"));
         endGame();
         return false;
     }
@@ -148,12 +150,16 @@ let loadWordAndStart = function () {
     wordToGuess = new Word(randomWord);
     // logs word for testing ONLY
     //  _____________________________________________
-    // console.log(wordToGuess + "\n" + randomWord)
+    console.log(randomWord)
     // ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
     lettersRemaining();
+
     maxGuesses = numberOfLtrsRemaining + 5;
     console.log(chalk.yellow.inverse("\n Number of guesses: " + maxGuesses+" \n"))
     startGame();
 }
+
+const welcome = " Welcome to Word Guess: Video Games!!! "
+log(chalk.bold.bgCyan("¯".repeat(welcome.length)+"\n"+welcome+"\n"+"_".repeat(welcome.length)))
 
 resetGame();

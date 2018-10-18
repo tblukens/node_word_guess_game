@@ -4,6 +4,9 @@ var Letter = function(letter, guessed){
     this.letter = letter;
     this.guessed = guessed;
     this.displayed = function() {
+        if (this.letter === " "){
+            this.guessed = true;
+        }
         if (this.guessed === true) {
             // console.log(this.letter)
             return this.letter;
@@ -11,11 +14,13 @@ var Letter = function(letter, guessed){
             //show underscore
             return "_";
         }
+        
     }
     this.checkGuess = function(guess) {
         if (guess === this.letter) {
             this.guessed = true;
-            console.log(chalk.green("\nCorrect! The letter was: " + this.letter+"\n"))
+            const repeater = 28;
+            return console.log(chalk.green.inverse("\n"+"¯".repeat(repeater)+"\n Correct! The letter was: " + chalk.underline(this.letter)+" \n"+"_".repeat(repeater)+"\n"))
         }
     }
 }
