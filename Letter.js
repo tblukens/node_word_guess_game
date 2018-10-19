@@ -1,14 +1,17 @@
+// Chalk allows you to change styling in command line
 const chalk = require("chalk")
 // create Letter constructor
 var Letter = function(letter, guessed){
     this.letter = letter;
     this.guessed = guessed;
+    // function to display letters. if guessed is true the letter is shown, otherwise underscore shows
     this.displayed = function() {
+        // this is to get rid of spaces in words... cheesy
         if (this.letter === " "){
             this.guessed = true;
         }
         if (this.guessed === true) {
-            // console.log(this.letter)
+            // returns letter so it can be displayed
             return this.letter;
         } else if (this.guessed === false) {
             //show underscore
@@ -16,6 +19,7 @@ var Letter = function(letter, guessed){
         }
         
     }
+    // checks guess against letter
     this.checkGuess = function(guess) {
         if (guess === this.letter) {
             this.guessed = true;
@@ -25,10 +29,14 @@ var Letter = function(letter, guessed){
     }
 }
 
+
+// -- LETTER.JS TESTING COMMANDS -- //
 // var a = new Letter ("a", false);
 
 // a.displayed();
 
 // a.checkGuess("a")
 
+
+// export letter function
 module.exports = Letter;
