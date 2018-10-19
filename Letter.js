@@ -1,5 +1,3 @@
-// Chalk allows you to change styling in command line
-const chalk = require("chalk")
 // create Letter constructor
 var Letter = function(letter, guessed){
     this.letter = letter;
@@ -23,8 +21,6 @@ var Letter = function(letter, guessed){
     this.checkGuess = function(guess) {
         if (guess === this.letter) {
             this.guessed = true;
-            const repeater = 28;
-            return console.log(chalk.green.inverse("\n"+"¯".repeat(repeater)+"\n Correct! The letter was: " + chalk.underline(this.letter)+" \n"+"_".repeat(repeater)+"\n"))
         }
     }
 }

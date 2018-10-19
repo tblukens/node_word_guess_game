@@ -23,7 +23,7 @@ const listOfWords = [
     "Elder Scrolls",
     "Super Mario Bros",
     "Grand Theft Auto",
-    
+
 ];
 
 // newGame to change whats displayed with a new word
@@ -51,7 +51,7 @@ let startGame = function () {
     // if users hasnt used all maxGuess and the word has not been guessed show their guessed letters
     if (maxGuesses > 0 && wordGuessed === false) {
         if (guessedLetters.length > 0) {
-            console.log("\nGuessed Letters: " + chalk.green(" " + guessedLetters.join(",")+" \n"))
+            console.log("\nGuessed Letters: " + chalk.green(" " + guessedLetters.join(",") + " \n"))
         }
         // if the game is fresh then display word starting out
         if (newGame === true) {
@@ -59,8 +59,7 @@ let startGame = function () {
             displayWord();
         }
         // here is our inquirer prompt to request user to enter a letter
-        inquirer.prompt([
-            {
+        inquirer.prompt([{
                 name: "letterGuess",
                 message: chalk.blue.inverse("Guess a letter: "),
             }
@@ -92,9 +91,14 @@ let startGame = function () {
 // noDuplicate function is where the guessed letters are pushed to array and starts user back at main game function
 let noDuplicate = function (guess) {
     // if the letter is included in the word
-    if (wordToGuess.word.indexOf(guess) === -1){
+    if (wordToGuess.word.indexOf(guess) === -1) {
         // if not a correct letter it will subtract a guess attempt
-        subtractGuessTotal();
+        subtractGuessTotal(guess);
+    } // if letter is correct log this message
+    if (wordToGuess.word.indexOf(guess) >= 0) {  
+        let l = chalk.underline(guess.toUpperCase());
+        let rightMsg = " Correct! The letter was: " + l +" ";
+        console.log(chalk.green.inverse("\n"+"¯".repeat(28)+"\n"+rightMsg+"\n"+"_".repeat(28)+"\n"))
     }
     // push the letter to guessed letters
     guessedLetters.push(guess)
@@ -108,9 +112,9 @@ let noDuplicate = function (guess) {
     startGame();
 }
 // function to subtract from guess attempts and let user know incorrect letter guess
-let subtractGuessTotal = function () {
-    let repeater = 43;
-    log(chalk.red.inverse("\n"+"¯".repeat(repeater)+"\n Sorry, that was not one of the letters... \n"+"_".repeat(repeater)+"\n"))
+let subtractGuessTotal = function (guess) {
+    let repeater = 40;
+    log(chalk.red.inverse("\n" + "¯".repeat(repeater) + "\n Sorry, "+chalk.underline(guess.toUpperCase())+" was not one of the letters... \n" + "_".repeat(repeater) + "\n"))
     maxGuesses--;
 }
 
@@ -131,7 +135,8 @@ let lettersRemaining = function () {
     // if word is fully completed this runs and shows user wins
     if (remaining === 0) {
         wordGuessed = true;
-        console.log(chalk.cyan.inverse("\n"+"¯".repeat(10)+"\n You win! \n"+"_".repeat(10)+"\n"));
+        let winMessage = " You Win!!! Word was: " + wordToGuess.word.toUpperCase() + " ";
+        console.log(chalk.cyan.inverse("\n" + "¯".repeat(winMessage.length + 2) + "\n " + winMessage + " \n" + "_".repeat(winMessage.length + 2) + "\n"));
         endGame();
         return false;
     }
@@ -175,8 +180,7 @@ let resetGame = function () {
         if (randomWord === wordToGuess.word) {
             // if it is the same word it will run resetGame again to get a new word
             resetGame();
-        }
-        else {
+        } else {
             // otherwise it will load the game and push the new random word into wordtoguess variable
             loadWordAndStart();
         }
@@ -194,18 +198,18 @@ let loadWordAndStart = function () {
     //  _____________________________________________
     // console.log(randomWord)
     // ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-    
+
     lettersRemaining();
 
     // this loads at the beginning of a new game
-    console.log(chalk.yellow.inverse("\n Number of guesses: " + maxGuesses+" \n"))
+    console.log(chalk.yellow.inverse("\n Number of guesses: " + maxGuesses + " \n"))
     startGame();
 }
 
 // welcome message
 const welcome = " Welcome to Word Guess: Video Games!!! "
 // logging welcome message
-log(chalk.bold.bgCyan("\n\n"+"¯".repeat(welcome.length)+"\n"+welcome+"\n"+"_".repeat(welcome.length)))
+log(chalk.bold.bgCyan("\n\n" + "¯".repeat(welcome.length) + "\n" + welcome + "\n" + "_".repeat(welcome.length)))
 
 // makes sure new game starts up right away
 // makes random word... etc...
